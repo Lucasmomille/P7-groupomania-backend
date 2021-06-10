@@ -3,12 +3,13 @@ module.exports = (sequelize, Sequelize) => {
         title: {
             type: Sequelize.STRING
         },
-        description: {
+        imageUrl: {
             type: Sequelize.STRING
         },
-        published: {
-            type: Sequelize.BOOLEAN
-        }
+        // posted_at ?
+        /*  postedAt: {
+             type: Sequelize.DATE
+         } */
     });
 
     return Post;

@@ -13,18 +13,18 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Create a Tutorial
+    // Create a Post
     const post = {
         title: req.body.title,
-        description: req.body.description,
-        published: req.body.published ? req.body.published : false
+        imageUrl: req.body.imageUrl,
+        // postedAt: req.body.postedAt ? req.body.postedAt : false
     };
 
-    // Save Tutorial in the database
+    // Save Post in the database
     Post.create({
-        title: tutorial.title,
-        description: tutorial.description,
-        published: tutorial.published ? tutorial.published : false
+        title: post.title,
+        imageUrl: post.imageUrl,
+        //  postedAt: post.postedAt ? post.postedAt : false
     }).then((post) => {
         //recup post ID
         console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);

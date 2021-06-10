@@ -1,5 +1,5 @@
 const express = require('express');
-
+const postsRoutes = require('./routes/posts.routes');
 const path = require('path');
 
 const app = express();
@@ -9,7 +9,7 @@ var helmet = require('helmet');
 
 app.use(helmet());
 
-const db = require("./app/models");
+const db = require("./models");
 
 db.sequelize.sync({ force: true }).then(() => {
     //run();
@@ -17,7 +17,7 @@ db.sequelize.sync({ force: true }).then(() => {
 
 });
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
+//app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -33,6 +33,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to Groupamania application." });
 });
+
+app.use('/api/posts', postsRoutes);
 
 
 
