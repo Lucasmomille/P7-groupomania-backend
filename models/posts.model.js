@@ -6,10 +6,9 @@ module.exports = (sequelize, Sequelize) => {
         imageUrl: {
             type: Sequelize.STRING
         },
-        // posted_at ?
-        /*  postedAt: {
-             type: Sequelize.DATE
-         } */
+        users_like: {
+            type: Sequelize.INTEGER
+        }
     });
 
     return Post;

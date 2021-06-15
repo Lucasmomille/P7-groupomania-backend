@@ -1,5 +1,7 @@
 const express = require('express');
 const postsRoutes = require('./routes/posts.routes');
+const authRoutes = require('./routes/auth.routes');
+const usersRoutes = require('./routes/users.routes');
 const path = require('path');
 
 const app = express();
@@ -10,11 +12,11 @@ var helmet = require('helmet');
 app.use(helmet());
 
 const db = require("./models");
-
+const Role = db.role;
 db.sequelize.sync({ force: true }).then(() => {
     //run();
     console.log("Drop and re-sync db.");
-
+    initial();
 });
 
 //app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -28,6 +30,22 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+function initial() {
+    Role.create({
+        id: 1,
+        name: "user"
+    });
+
+    Role.create({
+        id: 2,
+        name: "moderator"
+    });
+
+    Role.create({
+        id: 3,
+        name: "admin"
+    });
+}
 
 // simple route
 app.get("/", (req, res) => {
@@ -35,6 +53,9 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/posts', postsRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRoutes);
+
 
 
 

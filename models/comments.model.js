@@ -1,7 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
     const Comment = sequelize.define("comment", {
         message: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
+            allowNull: false
         },
         // Boolean ou string ?
         isAnswer: {
