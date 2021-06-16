@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         // posted_at ?
         answerTo: {
-            type: Sequelize.STRING
+            type: Sequelize.INTEGER
         }
     });
 

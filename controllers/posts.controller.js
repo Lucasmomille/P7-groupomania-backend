@@ -21,7 +21,7 @@ exports.create = (req, res) => {
         title: req.body.title,
         imageUrl: req.body.imageUrl,
         // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        users_like: 0,
+        likes: 0,
         // postedAt: req.body.postedAt ? req.body.postedAt : false
     };
 
@@ -29,7 +29,7 @@ exports.create = (req, res) => {
     Post.create({
         title: post.title,
         imageUrl: post.imageUrl,
-        users_like: post.users_like,
+        likes: post.likes,
 
     }).then((post) => {
         //recup post ID
@@ -58,7 +58,7 @@ exports.findAll = (req, res) => {
             },
             {
                 model: Likes,
-                as: "likes",
+                as: "user_like",
                 attributes: ["id"],
                 through: {
                     attributes: [],
@@ -87,7 +87,7 @@ exports.findById = (req, res) => {
             },
             {
                 model: Likes,
-                as: "likes",
+                as: "user_like",
                 attributes: ["id"],
                 through: {
                     attributes: [],
@@ -148,7 +148,7 @@ exports.delete = (req, res) => {
             },
             {
                 model: Likes,
-                as: "likes",
+                as: "user_like",
                 attributes: ["id"],
                 through: {
                     attributes: [],

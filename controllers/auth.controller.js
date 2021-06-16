@@ -1,5 +1,5 @@
 const db = require("../models");
-const config = require("../config/auth.config");
+//const config = require("../config/auth.config");
 const User = db.users;
 const Role = db.role;
 
@@ -64,7 +64,7 @@ exports.signin = (req, res) => {
                 });
             }
 
-            var token = jwt.sign({ id: user.id }, config.secret, {
+            var token = jwt.sign({ id: user.id }, process.env.TOKENJWT, {
                 expiresIn: 86400 // 24 hours
             });
 

@@ -43,7 +43,7 @@ db.users.hasMany(db.posts, {
     as: "posts",
 })
 db.posts.belongsTo(db.users, {
-    foreignKey: "usersId",
+    foreignKey: "userIdFk",
     as: "users",
 });
 
@@ -52,7 +52,7 @@ db.users.hasMany(db.comments, {
     as: "comments",
 })
 db.comments.belongsTo(db.users, {
-    foreignKey: "usersId",
+    foreignKey: "userIdFk",
     as: "users",
 });
 
@@ -62,7 +62,7 @@ db.posts.hasMany(db.comments, {
     as: "comments",
 })
 db.comments.belongsTo(db.posts, {
-    foreignKey: "commentsId",
+    foreignKey: "commentsIdFk",
     as: "posts",
 });
 
@@ -71,7 +71,7 @@ db.comments.hasMany(db.comments, {
     as: "comments_response",
 })
 db.comments.belongsTo(db.comments, {
-    foreignKey: "commentsId",
+    foreignKey: "commentsResIdFk",
     as: "comments",
 });
 
@@ -79,13 +79,13 @@ db.comments.belongsTo(db.comments, {
 db.likes.belongsToMany(db.posts, {
     through: "posts_like",
     as: "posts",
-    foreignKey: "like_id"
+    foreignKey: "likeIdFk"
 });
 
 db.posts.belongsToMany(db.likes, {
     through: "posts_like",
-    as: "likes",
-    foreignKey: "post_id",
+    as: "user_like",
+    foreignKey: "postIdFk",
 })
 
 module.exports = db;

@@ -9,4 +9,6 @@ router.get("/user", auth.verifyToken, controller.userBoard);
 router.get("/mod", auth.verifyToken, auth.isModerator, controller.moderatorBoard);
 router.get("/admin", auth.verifyToken, auth.isAdmin, controller.adminBoard);
 
+router.delete("/admin", auth.verifyToken, auth.isAdmin, controller.delete);
+// admin delete users
 module.exports = router;

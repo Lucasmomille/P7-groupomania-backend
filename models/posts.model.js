@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) => {
         imageUrl: {
             type: Sequelize.STRING
         },
-        users_like: {
+        likes: {
             type: Sequelize.INTEGER
         }
     });
