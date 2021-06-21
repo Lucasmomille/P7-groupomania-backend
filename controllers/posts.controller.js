@@ -22,7 +22,6 @@ exports.create = (req, res) => {
         imageUrl: req.body.imageUrl,
         // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
-        // postedAt: req.body.postedAt ? req.body.postedAt : false
     };
 
     // Save Post in the database

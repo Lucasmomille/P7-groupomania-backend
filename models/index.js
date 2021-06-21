@@ -41,6 +41,7 @@ db.ROLES = ["user", "admin", "moderator"];
 // Users and posts relationship
 db.users.hasMany(db.posts, {
     as: "posts",
+    onDelete: "cascade"
 })
 db.posts.belongsTo(db.users, {
     foreignKey: "userIdFk",
@@ -75,10 +76,10 @@ db.comments.belongsTo(db.comments, {
     as: "comments",
 });
 
-// Posts and Likes relationships
+// Many to many users - posts 
 db.likes.belongsToMany(db.posts, {
     through: "posts_like",
-    as: "posts",
+    as: "like",
     foreignKey: "likeIdFk"
 });
 

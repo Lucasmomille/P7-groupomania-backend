@@ -16,7 +16,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         }
-        //Besoin de mettre create_time?
     });
 
     return User;

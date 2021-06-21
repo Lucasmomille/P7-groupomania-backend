@@ -7,7 +7,7 @@ exports.create = (req, res) => {
     Comment.create({
         message: req.body.message,
         isAnswer: req.body.isAnswer ? req.body.isAnswer : false,
-        answerTo: req.body.tutorialId,
+        answerTo: req.body.isAnswer ? req.body.answerTo : null,
     }).then((comment) => {
         console.log(`>> Created Comment ${JSON.stringify(comment, null, 4)}`);
         res.send(comment);
