@@ -12,17 +12,5 @@ router.post(
     verifySignUp.checkRolesExisted,
     controller.signup
 );
-/* module.exports = function (app) {
 
-    app.post(
-        "/api/auth/signup",
-        [
-            verifySignUp.checkDuplicateUsernameOrEmail,
-            verifySignUp.checkRolesExisted
-        ],
-        controller.signup
-    );
-
-   
-}; */
 module.exports = router;

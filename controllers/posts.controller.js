@@ -1,14 +1,13 @@
 const db = require("../models");
 const Post = db.posts;
 const Comment = db.comments;
-const Likes = db.likes;
 const fs = require('fs');
 
 const Op = db.Sequelize.Op;
 
 
 exports.create = (req, res) => {
-    console.log(req.body);
+    console.log(req.body.title);
     if (!req.body.title) {
         res.status(400).send({
             message: "Title can not be empty"
@@ -19,8 +18,8 @@ exports.create = (req, res) => {
     // Create a Post
     const post = {
         title: req.body.title,
-        imageUrl: req.body.imageUrl,
-        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        //imageUrl: req.body.imageUrl,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
     };
 
@@ -55,14 +54,6 @@ exports.findAll = (req, res) => {
                 model: Comment,
                 as: "comments"
             },
-            {
-                model: Likes,
-                as: "user_like",
-                attributes: ["id"],
-                through: {
-                    attributes: [],
-                },
-            }
         ],
     }).then(data => {
         res.send(data);
@@ -83,14 +74,6 @@ exports.findById = (req, res) => {
             {
                 model: Comment,
                 as: "comments",
-            },
-            {
-                model: Likes,
-                as: "user_like",
-                attributes: ["id"],
-                through: {
-                    attributes: [],
-                }
             }
         ]
     })
@@ -106,16 +89,21 @@ exports.findById = (req, res) => {
 // Update a Post by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
+    const reqPost = req.body.post
 
-    /* const postObject = req.file ?
-    {
-      ...JSON.parse(req.body.post),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body }; */
+    /* if (req.body.imageUrl !== " ") {
+        fs.unlink(`images/${req.body.imageUrl}`);
+        reqPost.imageUrl = req.file
+    } */
+    const postObject = req.file ?
+        {
+            reqPost,
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : { ...req.body };
 
-    Post.update(req.body, {
+    Post.update(postObject, {
         where: { id: id }
-    })
+    }/* , { ...postObject, id: id } */)
         .then(num => {
             if (num == 1) {
                 res.send({
@@ -144,14 +132,6 @@ exports.delete = (req, res) => {
             {
                 model: Comment,
                 as: "comments",
-            },
-            {
-                model: Likes,
-                as: "user_like",
-                attributes: ["id"],
-                through: {
-                    attributes: [],
-                }
             }
         ]
     })

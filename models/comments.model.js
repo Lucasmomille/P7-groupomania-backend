@@ -4,11 +4,11 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        // Boolean ou string ?
+
         isAnswer: {
             type: Sequelize.BOOLEAN
         },
-        // posted_at ?
+
         answerTo: {
             type: Sequelize.INTEGER
         }

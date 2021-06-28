@@ -82,6 +82,8 @@ isModeratorOrAdmin = (req, res, next) => {
     });
 };
 
+// is userId is user loggedin ? (update only own profile)
+
 const auth = {
     verifyToken: verifyToken,
     isAdmin: isAdmin,

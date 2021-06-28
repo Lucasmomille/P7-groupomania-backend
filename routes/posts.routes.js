@@ -6,7 +6,7 @@ const postsCtrl = require('../controllers/posts.controller');
 
 //rajouter multer après auth
 
-router.post('/', auth.verifyToken, postsCtrl.create);
+router.post('/', auth.verifyToken, multer, postsCtrl.create);
 // Retrieve all  Posts
 router.get("/all", auth.verifyToken, postsCtrl.findAll);
 
@@ -14,7 +14,7 @@ router.get("/all", auth.verifyToken, postsCtrl.findAll);
 router.get("/:id", auth.verifyToken, postsCtrl.findById);
 
 // Update a Post with id
-router.put("/:id", auth.verifyToken, postsCtrl.update);
+router.put("/:id", auth.verifyToken, multer, postsCtrl.update);
 
 // Delete a Post with id
 router.delete("/:id", auth.verifyToken, postsCtrl.delete);

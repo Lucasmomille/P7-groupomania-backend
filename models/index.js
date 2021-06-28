@@ -22,7 +22,6 @@ db.sequelize = sequelize;
 db.posts = require("./posts.model.js")(sequelize, Sequelize);
 db.users = require("./users.model.js")(sequelize, Sequelize);
 db.comments = require("./comments.model.js")(sequelize, Sequelize);
-db.likes = require("./likes.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.users, {
@@ -51,6 +50,7 @@ db.posts.belongsTo(db.users, {
 // Users and comments relationship
 db.users.hasMany(db.comments, {
     as: "comments",
+    onDelete: "cascade"
 })
 db.comments.belongsTo(db.users, {
     foreignKey: "userIdFk",
@@ -61,6 +61,7 @@ db.comments.belongsTo(db.users, {
 // Posts and comments relationship
 db.posts.hasMany(db.comments, {
     as: "comments",
+    onDelete: "cascade"
 })
 db.comments.belongsTo(db.posts, {
     foreignKey: "commentsIdFk",
@@ -70,6 +71,7 @@ db.comments.belongsTo(db.posts, {
 // Comments relationship auto
 db.comments.hasMany(db.comments, {
     as: "comments_response",
+
 })
 db.comments.belongsTo(db.comments, {
     foreignKey: "commentsResIdFk",
@@ -77,16 +79,16 @@ db.comments.belongsTo(db.comments, {
 });
 
 // Many to many users - posts 
-db.likes.belongsToMany(db.posts, {
-    through: "posts_like",
-    as: "like",
-    foreignKey: "likeIdFk"
-});
-
-db.posts.belongsToMany(db.likes, {
+db.users.belongsToMany(db.posts, {
     through: "posts_like",
     as: "user_like",
-    foreignKey: "postIdFk",
+    foreignKey: "userLikeIdFk",
+});
+
+db.posts.belongsToMany(db.users, {
+    through: "posts_like",
+    as: "post_like",
+    foreignKey: "postLikeIdFk",
 })
 
 module.exports = db;

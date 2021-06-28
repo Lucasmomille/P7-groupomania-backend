@@ -1,0 +1,9 @@
+{
+    "firstname": "luke",
+    "lastname": "sky",
+    "email": "luke@gmail.com",
+    "password": "password"
+}
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI0NTIyNTg4LCJleHAiOjE2MjQ2MDg5ODh9.s0AZI0Vuse5BmjgI6fxmf6CWJskaWVukNpJnGV-K3wQ
