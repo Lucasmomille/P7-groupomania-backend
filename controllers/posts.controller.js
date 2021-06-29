@@ -45,10 +45,10 @@ exports.create = (req, res) => {
 // Retrieve all Post from the database.
 exports.findAll = (req, res) => {
     const title = req.query.title;
-    var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+    //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
     Post.findAll({
-        where: condition,
+        //  where: condition,
         include: [
             {
                 model: Comment,
@@ -91,10 +91,23 @@ exports.update = (req, res) => {
     const id = req.params.id;
     const reqPost = req.body.post
 
-    /* if (req.body.imageUrl !== " ") {
-        fs.unlink(`images/${req.body.imageUrl}`);
-        reqPost.imageUrl = req.file
-    } */
+    if (req.file) {
+        Post.findByPk(id, {
+            include: [
+                {
+                    model: Comment,
+                    as: "comments",
+                }
+            ]
+        })
+            .then(post => {
+                const filename = post.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    console.log("unlink")
+                })
+            })
+    }
+
     const postObject = req.file ?
         {
             reqPost,
@@ -120,6 +133,7 @@ exports.update = (req, res) => {
                 message: "Error updating Post with id=" + id
             });
         });
+    // console.log(res)
 };
 
 
@@ -127,7 +141,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    /* Post.findByPk(id, {
+    Post.findByPk(id, {
         include: [
             {
                 model: Comment,
@@ -137,27 +151,35 @@ exports.delete = (req, res) => {
     })
         .then(post => {
             const filename = post.imageUrl.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => { */
-    Post.destroy({
-        where: { id: id }
-    })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Post was deleted successfully!"
-                });
-            } else {
-                res.send({
-                    message: `Cannot delete Post with id=${id}. Maybe Post was not found!`
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Could not delete Post with id=" + id
-            });
+            fs.unlink(`images/${filename}`, () => {
+                Post.destroy({
+                    where: { id: id }
+                })
+                    /* .then(() => { 
+                
+                    }) */
+                    .then(num => {
+                        if (num == 1) {
+                            res.send({
+                                message: "Post was deleted successfully!"
+                            });
+                        } else {
+                            res.send({
+                                message: `Cannot delete Post with id=${id}. Maybe Post was not found!`
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message: "Could not delete Post with id=" + id
+                        });
+                    });
+            })
         });
-    /* })
-        .catch(error => res.status(500).json({ error }));
-}) */
 };
+
+
+
+/* })
+    .catch(error => res.status(500).json({ error }));
+}) */
