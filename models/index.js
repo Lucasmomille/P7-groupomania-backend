@@ -68,15 +68,6 @@ db.comments.belongsTo(db.posts, {
     as: "posts",
 });
 
-// Comments relationship auto
-db.comments.hasMany(db.comments, {
-    as: "comments_response",
-
-})
-db.comments.belongsTo(db.comments, {
-    foreignKey: "commentsResIdFk",
-    as: "comments",
-});
 
 // Many to many users - posts 
 db.users.belongsToMany(db.posts, {
