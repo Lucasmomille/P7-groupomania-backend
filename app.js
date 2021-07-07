@@ -17,7 +17,7 @@ const Role = db.role;
 db.sequelize.sync(/* { force: true } */).then(() => {
     // run();
     console.log("Drop and re-sync db.");
-    // initial();
+    //initial();
 });
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
