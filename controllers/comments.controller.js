@@ -9,7 +9,7 @@ exports.create = (req, res) => {
         isAnswer: req.body.isAnswer ? req.body.isAnswer : false,
         answerTo: req.body.isAnswer ? req.body.answerTo : null,
         postId: req.body.postId,
-        userId: req.body.userId,
+        userId: req.userId,
     }).then((comment) => {
         console.log(`>> Created Comment ${JSON.stringify(comment, null, 4)}`);
         res.send(comment);
@@ -25,21 +25,30 @@ exports.findById = (req, res) => {
     const id = req.params.id;
     Comment.findByPk(id, { include: ["posts"] })
         .then((comment) => {
-            res.send(comment);;
+
+            res.send(comment);
+            console.log(comment.dataValues.userId);
+            return comment.dataValues.userId;
         })
         .catch((err) => {
             console.log(">> Error while finding comment: ", err);
         });
+
 };
+
+
 
 exports.update = (req, res) => {
     const id = req.params.id;
     // ici on peut modifier tout profile tant qu'on a l'id ... Au front de le gérer ?
+    // recupérer findbyid
+    console.log(req.body)
     Comment.update(req.body, {
         where: { id: id }
     })
         .then(num => {
             if (num == 1) {
+
                 res.send({
                     message: "Comment was updated successfully."
                 });

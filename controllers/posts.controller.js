@@ -1,13 +1,16 @@
 const db = require("../models");
 const Post = db.posts;
 const Comment = db.comments;
+const User = db.users;
 const fs = require('fs');
+const { users } = require("../models");
 
 const Op = db.Sequelize.Op;
 
 
 exports.create = (req, res) => {
     console.log(req.body.title);
+    console.log(req.file)
     if (!req.body.title) {
         res.status(400).send({
             message: "Title can not be empty"
@@ -20,6 +23,7 @@ exports.create = (req, res) => {
         title: req.body.title,
         //imageUrl: req.body.imageUrl,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        userId: req.userId,
         likes: 0,
     };
 
@@ -28,9 +32,11 @@ exports.create = (req, res) => {
         title: post.title,
         imageUrl: post.imageUrl,
         likes: post.likes,
+        userId: post.userId
 
     }).then((post) => {
         //recup post ID
+        // console.log(req.file);
         console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
         res.send(post);
     }).catch((err) => {
@@ -44,7 +50,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Post from the database.
 exports.findAll = (req, res) => {
-    const title = req.query.title;
+    //const title = req.query.title;
     //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
     Post.findAll({
@@ -52,7 +58,14 @@ exports.findAll = (req, res) => {
         include: [
             {
                 model: Comment,
-                as: "comments"
+                as: "comments",
+                nested: true/* ,
+                include: [
+                    {
+                        model: User,
+                        as: users,
+                    }
+                ] */
             },
         ],
     }).then(data => {

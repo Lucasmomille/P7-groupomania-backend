@@ -43,7 +43,7 @@ db.users.hasMany(db.posts, {
     onDelete: "cascade"
 })
 db.posts.belongsTo(db.users, {
-    foreignKey: "userIdFk",
+    foreignKey: "userId",
     as: "users",
 });
 
@@ -64,7 +64,7 @@ db.posts.hasMany(db.comments, {
     onDelete: "cascade"
 })
 db.comments.belongsTo(db.posts, {
-    foreignKey: "commentsId",
+    foreignKey: "postId",
     as: "posts",
 });
 
