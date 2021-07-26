@@ -20,6 +20,7 @@ exports.moderatorBoard = (req, res) => {
 // Update a User by the id in the request
 exports.update = (req, res) => {
     //const id = req.params.id;
+    console.log("body ", req.body);
     const id = req.userId;
     // ici on peut modifier tout profile tant qu'on a l'id ... Au front de le gérer ?
     User.update(req.body, {
@@ -58,7 +59,7 @@ exports.findById = (req, res) => {
 
 // Delete a User with the specified id in the request
 exports.delete = (req, res) => {
-    const id = req.params.id;
+    const id = req.userId;
 
     User.destroy({
         where: { id: id }

@@ -1,9 +1,10 @@
 const db = require("../models");
 const Post = db.posts;
 const Comment = db.comments;
+const Likes = db.likes;
 const User = db.users;
 const fs = require('fs');
-const { users } = require("../models");
+
 
 const Op = db.Sequelize.Op;
 
@@ -24,14 +25,14 @@ exports.create = (req, res) => {
         //imageUrl: req.body.imageUrl,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         userId: req.userId,
-        likes: 0,
+
     };
 
     // Save Post in the database
     Post.create({
         title: post.title,
         imageUrl: post.imageUrl,
-        likes: post.likes,
+
         userId: post.userId
 
     }).then((post) => {
@@ -47,6 +48,53 @@ exports.create = (req, res) => {
     });
 };
 
+// create like
+
+exports.createLike = (req, res) => {
+    console.log(req.body)
+    Likes.create({
+        postId: req.body.postId,
+        userId: req.userId,
+    }).then((post) => {
+        //recup post ID
+        // console.log(req.file);
+        console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
+        res.send(post);
+    }).catch((err) => {
+        console.error(">> Error while creating post: ", err);
+        res.status(500).send({
+            message: err.message || "Some error occurred while creating the post."
+        })
+    });
+}
+
+// delete likes
+
+exports.deleteLikes = (req, res) => {
+    const id = req.params.id;
+    const condition1 = { id: id };
+    const condition2 = { userId: req.userId };
+    const condition3 = { postId: req.body.postId }
+    Likes.destroy({
+        where: { ...condition1, ...condition2, ...condition3 }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Likes was deleted successfully!"
+                });
+            } else {
+                res.status(400).send({
+                    message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not delete Likes with id=" + id
+            });
+        });
+};
 
 // Retrieve all Post from the database.
 exports.findAll = (req, res) => {
@@ -59,14 +107,25 @@ exports.findAll = (req, res) => {
             {
                 model: Comment,
                 as: "comments",
-                nested: true/* ,
                 include: [
                     {
                         model: User,
-                        as: users,
+                        as: "users",
                     }
-                ] */
+                ]
+
+
             },
+            {
+                model: User,
+                as: "users",
+
+            },
+            {
+                model: Likes,
+                as: "likes"
+            }
+
         ],
     }).then(data => {
         res.send(data);

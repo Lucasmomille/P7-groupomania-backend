@@ -23,6 +23,8 @@ db.posts = require("./posts.model.js")(sequelize, Sequelize);
 db.users = require("./users.model.js")(sequelize, Sequelize);
 db.comments = require("./comments.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
+db.likes = require("../models/likes.model.js")(sequelize, Sequelize);
+
 
 db.role.belongsToMany(db.users, {
     through: "user_roles",
@@ -69,17 +71,23 @@ db.comments.belongsTo(db.posts, {
 });
 
 
-// Many to many users - posts 
-db.users.belongsToMany(db.posts, {
-    through: "posts_like",
-    as: "user_like",
-    foreignKey: "userLikeIdFk",
+db.posts.hasMany(db.likes, {
+    as: "likes",
+    onDelete: "cascade"
+})
+db.likes.belongsTo(db.posts, {
+    foreignKey: "postId",
+    as: "posts",
 });
 
-db.posts.belongsToMany(db.users, {
-    through: "posts_like",
-    as: "post_like",
-    foreignKey: "postLikeIdFk",
+db.users.hasMany(db.likes, {
+    as: "likes",
+    onDelete: "cascade"
 })
+db.likes.belongsTo(db.users, {
+    foreignKey: "userId",
+    as: "users",
+});
+
 
 module.exports = db;

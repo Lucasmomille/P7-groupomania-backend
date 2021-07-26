@@ -5,10 +5,6 @@ module.exports = (sequelize, Sequelize) => {
         },
         imageUrl: {
             type: Sequelize.STRING
-        },
-        likes: {
-            type: Sequelize.INTEGER,
-            allowNull: true
         }
     });
 
