@@ -48,54 +48,6 @@ exports.create = (req, res) => {
     });
 };
 
-// create like
-
-exports.createLike = (req, res) => {
-    console.log(req.body)
-    Likes.create({
-        postId: req.body.postId,
-        userId: req.userId,
-    }).then((post) => {
-        //recup post ID
-        // console.log(req.file);
-        console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
-        res.send(post);
-    }).catch((err) => {
-        console.error(">> Error while creating post: ", err);
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the post."
-        })
-    });
-}
-
-// delete likes
-
-exports.deleteLikes = (req, res) => {
-    const id = req.params.id;
-    const condition1 = { id: id };
-    const condition2 = { userId: req.userId };
-    const condition3 = { postId: req.body.postId }
-    Likes.destroy({
-        where: { ...condition1, ...condition2, ...condition3 }
-    })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Likes was deleted successfully!"
-                });
-            } else {
-                res.status(400).send({
-                    message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Could not delete Likes with id=" + id
-            });
-        });
-};
-
 // Retrieve all Post from the database.
 exports.findAll = (req, res) => {
     //const title = req.query.title;
@@ -251,7 +203,213 @@ exports.delete = (req, res) => {
 };
 
 
+// create like
+
+exports.likePost = (req, res) => {
+    let postId = req.body.postId;
+    let userId = req.userId;
+    //let like = req.body.like;
+    //const id = req.body.likeId || null;
+
+    Post.findByPk(postId, {
+        include: [
+            {
+                model: Likes,
+                as: "likes",
+            }
+        ]
+    }).then(response => {
+
+        let likes = response.dataValues.likes;
+
+        for (const like of likes) {
+            console.log(like.userId)
+            if (like.userId !== userId) {
+                console.log("userId is here")
+                const condition1 = { id: like.id };
+                const condition2 = { userId: req.userId };
+                const condition3 = { postId: postId }
+                Likes.destroy({
+                    where: { ...condition1 }
+                })
+                    .then(num => {
+                        if (num == 1) {
+                            res.send({
+                                message: "Likes was deleted successfully!"
+                            });
+                        } else {
+                            res.send({
+                                message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message: "Could not delete Likes with id=" + id
+                        });
+                    });
+                return
+            } else {
+                console.log("userId isn't")
+
+                //console.log([...likes])
+                //if()
+                /* Likes.create({
+                    postId: postId,
+                    userId: userId,
+                }).then((post) => {
+                    //recup post ID
+                    // console.log(req.file);
+                    console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
+                    res.send(post);
+                }).catch((err) => {
+                    console.error(">> Error while creating post: ", err);
+                    res.status(500).send({
+                        message: err.message || "Some error occurred while creating the post."
+                    })
+                });
+                return */
+            }
+        }
+
+    }
+    ).catch(err => {
+        res.status(500).send({
+            message: "Could not delete Likes with id"
+        });
+    });
+
+    /* if (id) {
+        const condition1 = { id: id };
+        const condition2 = { userId: req.userId };
+        const condition3 = { postId: req.body.postId }
+        Likes.destroy({
+            where: { ...condition1, ...condition2, ...condition3 }
+        })
+            .then(num => {
+                if (num == 1) {
+                    res.send({
+                        message: "Likes was deleted successfully!"
+                    });
+                } else {
+                    res.send({
+                        message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
+                    });
+                }
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message: "Could not delete Likes with id=" + id
+                });
+            });
+    } else {
+        Likes.create({
+            postId: postId,
+            userId: userId,
+        }).then((post) => {
+            //recup post ID
+            // console.log(req.file);
+            console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
+            res.send(post);
+        }).catch((err) => {
+            console.error(">> Error while creating post: ", err);
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the post."
+            })
+        });
+    } */
+
+}
+
+exports.createLike = (req, res) => {
+    console.log(req.body)
+    Likes.create({
+        postId: req.body.postId,
+        userId: req.userId,
+    }).then((post) => {
+        //recup post ID
+        // console.log(req.file);
+        console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
+        res.send(post);
+    }).catch((err) => {
+        console.error(">> Error while creating post: ", err);
+        res.status(500).send({
+            message: err.message || "Some error occurred while creating the post."
+        })
+    });
+}
+
+// delete likes
+
+exports.deleteLikes = (req, res) => {
+    const id = req.params.id;
+    const condition1 = { id: id };
+    const condition2 = { userId: req.userId };
+    const condition3 = { postId: req.body.postId }
+    Likes.destroy({
+        where: { ...condition1, ...condition2, ...condition3 }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Likes was deleted successfully!"
+                });
+            } else {
+                res.status(400).send({
+                    message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not delete Likes with id=" + id
+            });
+        });
+};
+
+
 
 /* })
     .catch(error => res.status(500).json({ error }));
 }) */
+
+
+/* if (like === 1) {
+        Likes.create({
+            postId: postId,
+            userId: userId,
+        }).then((post) => {
+            //recup post ID
+            // console.log(req.file);
+            console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
+            res.send(post);
+        }).catch((err) => {
+            console.error(">> Error while creating post: ", err);
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the post."
+            })
+        });
+    } else {
+        const condition1 = { id: id };
+        const condition2 = { userId: req.userId };
+        const condition3 = { postId: req.body.postId }
+        Likes.destroy({
+            where: { ...condition1, ...condition2, ...condition3 }
+        })
+            .then(num => {
+                if (num == 1) {
+                    res.send({
+                        message: "Likes was deleted successfully!"
+                    });
+                } else {
+                    res.send({
+                        message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
+                    });
+                }
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message: "Could not delete Likes with id=" + id
+                });
+            });
+    } */

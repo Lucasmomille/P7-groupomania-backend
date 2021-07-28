@@ -23,6 +23,8 @@ router.post("/likes", auth.verifyToken, postsCtrl.createLike);
 
 router.delete("/likes/:id", auth.verifyToken, postsCtrl.deleteLikes);
 
+//router.post("/likes/two", auth.verifyToken, postsCtrl.likePost);
+
 /* // Delete all posts
 router.delete("/", postsCtrl.deleteAll); */
 
