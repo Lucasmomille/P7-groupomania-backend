@@ -15,7 +15,6 @@ app.use(helmet());
 const db = require("./models");
 const Role = db.role;
 db.sequelize.sync(/* { force: true } */).then(() => {
-    // run();
     console.log("Drop and re-sync db.");
     //initial();
 });
