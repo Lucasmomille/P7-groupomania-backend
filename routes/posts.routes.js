@@ -19,11 +19,12 @@ router.put("/:id", auth.verifyToken, multer, postsCtrl.update);
 // Delete a Post with id
 router.delete("/:id", auth.verifyToken, postsCtrl.delete);
 
+// Create and Delete likes
+
 router.post("/likes", auth.verifyToken, postsCtrl.createLike);
 
 router.delete("/likes/:id", auth.verifyToken, postsCtrl.deleteLikes);
 
-//router.post("/likes/two", auth.verifyToken, postsCtrl.likePost);
 
 /* // Delete all posts
 router.delete("/", postsCtrl.deleteAll); */
