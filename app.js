@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require("express-rate-limit");
 const postsRoutes = require('./routes/posts.routes');
 const authRoutes = require('./routes/auth.routes');
 const usersRoutes = require('./routes/users.routes');
@@ -9,8 +10,14 @@ const app = express();
 
 var helmet = require('helmet');
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100
+});
 
 app.use(helmet());
+app.use(limiter);
+
 
 const db = require("./models");
 const Role = db.role;

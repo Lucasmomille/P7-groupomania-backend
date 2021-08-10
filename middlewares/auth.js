@@ -1,12 +1,10 @@
 const jwt = require("jsonwebtoken");
-//const config = require("../config/auth.config.js");
+
 const db = require("../models");
 const User = db.users;
 
 verifyToken = (req, res, next) => {
     let token = req.headers["x-access-token"];
-    //let token = req.headers.authorization.split(' ')[1];
-    // say it's undefined, no authorization in headers
 
     if (!token) {
         return res.status(403).send({
@@ -82,7 +80,6 @@ isModeratorOrAdmin = (req, res, next) => {
     });
 };
 
-// is userId is user loggedin ? (update only own profile)
 
 const auth = {
     verifyToken: verifyToken,

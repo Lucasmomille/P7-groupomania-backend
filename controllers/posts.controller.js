@@ -22,7 +22,6 @@ exports.create = (req, res) => {
     // Create a Post
     const post = {
         title: req.body.title,
-        //imageUrl: req.body.imageUrl,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         userId: req.userId,
 
@@ -50,11 +49,8 @@ exports.create = (req, res) => {
 
 // Retrieve all Post from the database.
 exports.findAll = (req, res) => {
-    //const title = req.query.title;
-    //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
     Post.findAll({
-        //  where: condition,
         include: [
             {
                 model: Comment,
@@ -250,50 +246,3 @@ exports.deleteLikes = (req, res) => {
             });
         });
 };
-
-
-
-/* })
-    .catch(error => res.status(500).json({ error }));
-}) */
-
-
-/* if (like === 1) {
-        Likes.create({
-            postId: postId,
-            userId: userId,
-        }).then((post) => {
-            //recup post ID
-            // console.log(req.file);
-            console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
-            res.send(post);
-        }).catch((err) => {
-            console.error(">> Error while creating post: ", err);
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the post."
-            })
-        });
-    } else {
-        const condition1 = { id: id };
-        const condition2 = { userId: req.userId };
-        const condition3 = { postId: req.body.postId }
-        Likes.destroy({
-            where: { ...condition1, ...condition2, ...condition3 }
-        })
-            .then(num => {
-                if (num == 1) {
-                    res.send({
-                        message: "Likes was deleted successfully!"
-                    });
-                } else {
-                    res.send({
-                        message: `Cannot delete Likes with id=${id}. Maybe Likes was not found!`
-                    });
-                }
-            })
-            .catch(err => {
-                res.status(500).send({
-                    message: "Could not delete Likes with id=" + id
-                });
-            });
-    } */
