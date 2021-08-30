@@ -6,6 +6,8 @@ Remove -example from .env
 
 Add your own code in this file
 
+Create a folder images
+
 ### Before running the app for the first time
 In app.js uncomment "{ force: true }" and "initial();"
 

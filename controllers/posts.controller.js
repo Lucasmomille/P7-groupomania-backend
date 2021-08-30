@@ -4,8 +4,6 @@ const Comment = db.comments;
 const Likes = db.likes;
 const User = db.users;
 const fs = require('fs');
-
-
 const Op = db.Sequelize.Op;
 
 
@@ -31,12 +29,9 @@ exports.create = (req, res) => {
     Post.create({
         title: post.title,
         imageUrl: post.imageUrl,
-
         userId: post.userId
 
     }).then((post) => {
-        //recup post ID
-        // console.log(req.file);
         console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
         res.send(post);
     }).catch((err) => {
@@ -136,7 +131,7 @@ exports.update = (req, res) => {
 
     Post.update(postObject, {
         where: { id: id }
-    }/* , { ...postObject, id: id } */)
+    })
         .then(num => {
             if (num == 1) {
                 res.send({
@@ -175,9 +170,6 @@ exports.delete = (req, res) => {
                 Post.destroy({
                     where: { id: id }
                 })
-                    /* .then(() => { 
-                
-                    }) */
                     .then(num => {
                         if (num == 1) {
                             res.send({
@@ -207,8 +199,6 @@ exports.createLike = (req, res) => {
         postId: req.body.postId,
         userId: req.userId,
     }).then((post) => {
-        //recup post ID
-        // console.log(req.file);
         console.log(`>> Created post ${JSON.stringify(post, null, 4)}`);
         res.send(post);
     }).catch((err) => {
