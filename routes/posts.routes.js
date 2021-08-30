@@ -17,7 +17,7 @@ router.get("/:id", auth.verifyToken, postsCtrl.findById);
 router.put("/:id", auth.verifyToken, multer, postsCtrl.update);
 
 // Delete a Post with id
-router.delete("/:id", auth.verifyToken, postsCtrl.delete);
+router.delete("/:id", auth.verifyToken, auth.isAdmin, postsCtrl.delete);
 
 // Create and Delete likes
 
